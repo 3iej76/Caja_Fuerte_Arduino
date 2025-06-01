@@ -1,14 +1,22 @@
-## Explicación
-Aqui se explicará el código linea por linea:
-### Importación de Servo.h:
-Aqui es importada la librería Servo.h para el funcionamiento del servomotor. También se define el nombre que se utilizará para emplear la función en el código
+
+## ✨ Explicación
+
+Aquí se explicará el código **línea por línea**:
+
+### 📥 Importación de `Servo.h`
+
+Se importa la librería `Servo.h` para el funcionamiento del servomotor. También **se define el nombre que se utilizará para emplear la función en el código**:
+
 ```cpp
 #include <Servo.h>  // Librería estándar Servo
 
 Servo servo;  // Servo estándar
 ```
-### Definición de pines
-Aqui se guarda en constantes el numero de pin al que se conecta cada sensor (el del bluetooth no se define porque utiliza el 0 (RX) y el 1 (TX), pines especiales que no lo necesitan).
+
+### ⚙️ Definición de pines
+
+Se **almacenan** en constantes los **números de pin a los que se conecta** cada sensor. El del módulo Bluetooth no se define porque utiliza los pines especiales 0 (RX) y 1 (TX), que no lo requieren.
+
 ```cpp
 const int sensorPin1 = 12;
 const int sensorPin2 = 2;
@@ -18,15 +26,21 @@ const int servoPin = 10;
 const int ledPin = 8;
 const int aguaPin = 7;
 ```
-### Definición de variables
-Aqui se definen las 3 variables principales binarias. Por defecto valen 0 (apagadas)
+
+### 📦 Definición de variables
+
+Se definen **tres variables binarias principales**. Por defecto, valen 0 (apagadas).
+
 ```cpp
 int variable1 = 0;
 int variable2 = 0;
 int variable3 = 0;
 ```
-### Definición de flags
-Después se crean las flags, variables booleanas (verdadero o falso) que nos ayudan a dejar constancia de la activación de funciones
+
+### 🏁 Definición de *flags*
+
+Se crean las *flags*, variables booleanas (verdadero o falso) que **ayudan a mantener el control del estado de ciertas acciones**.
+
 ```cpp
 bool variable1Activable = false;
 bool variable2Activable = false;
@@ -35,10 +49,12 @@ bool parpadeoCierreRealizado = false;
 bool temporizadorActivo1 = false;
 bool temporizadorActivo2 = false;
 bool alarmaAguaActivada = false;
-
 ```
-### Otras variables
-Aqui se crean las variables de los temporizadores y del monitor de variables, además de un par más de flags
+
+### 🧮 Otras variables
+
+Se definen las variables, los temporizadores y el monitoreo, además de algunas *flags* adicionales.
+
 ```cpp
 unsigned long tiempoActivacion1 = 0;
 unsigned long tiempoActivacion2 = 0;
@@ -50,16 +66,22 @@ const unsigned long intervaloPrint = 1000;
 bool alarmaActivada = false;
 bool cajaAbierta = false;
 ```
-### abrirCaja()
-Despues se crean la primera función, abrirCaja(). Lo que hace es activar la flag y girar el motor.
+
+### 🔓 `abrirCaja()`
+
+Después se crea la** primera función**, `abrirCaja()`. Lo que hace es activar la flag y girar el motor.
+
 ```cpp
 void abrirCaja() {
   cajaAbierta = true;
   servo.write(180);  // Abrir al máximo
 }
 ```
-### cerrarCaja()
-Aqui se crea la función cerrarCaja(), que reinicia las variables y las flags y gira el motor
+
+### 🔐 `cerrarCaja()`
+
+Aquí **se crea la función** `cerrarCaja()`, que reinicia las variables y las flags y gira el motor.
+
 ```cpp
 void cerrarCaja() {
   variable1 = 0;
@@ -72,8 +94,11 @@ void cerrarCaja() {
   servo.write(90);  // Posición cerrada (media posición)
 }
 ```
-### setup()
-Aqui está la función setup, una función que por defecto se activa al iniciarse o reiniciarse la placa. Aqui se definen los pines de los sensores como INPUT, y el altavoz y la luz como OUTPUT, ya que reciben ordenea. También se pone el motor en su posición por defecto, pero esto se hace por comodidad al testear. Además se inicia la comunicación Serial a 9600 baudios para el bluetooth
+
+### 🛠️ `setup()`
+
+Aquí está la **función setup**, una función que por defecto se activa al iniciarse o reiniciarse la placa. Aquí se definen los pines de los sensores como `INPUT`, y el altavoz y la luz como `OUTPUT`, ya que reciben ordenes. También **se pone el motor en su posición por defecto**, pero esto se hace **por comodidad al testear**. Además se inicia la comunicación Serial a `38400 baudios` para el bluetooth.
+
 ```cpp
 void setup() {
   pinMode(sensorPin1, INPUT);
@@ -86,10 +111,14 @@ void setup() {
   servo.attach(servoPin);
   servo.write(90);  // Posición cerrada inicial
 
-  Serial.begin(9600);
+  Serial.begin(38400);
 }
 ```
-Estas son las funciones de ejecutar sirena, es un bucle que con el tiempo y unas variables hace el tono necesario.
+
+### 📢 Funciones de alarma (`ejecutarSirena`, `ejecutarSirenaAgua`)
+
+Estas son las **funciones de ejecutar sirena**, son un bucle que con el tiempo y unas variables hacen el tono necesario.
+
 ```cpp
 void ejecutarSirena() {
   static int freq = 1000;
@@ -128,14 +157,22 @@ void ejecutarSirenaAgua() {
   }
 }
 ```
-Ahora empieza la funcion más importante, el loop(). Está es una función predeterminada que se ejecuta en bucle esperando condiciones y actualizaciones. Al incio, recoge el estado de los 43 sensores (agua, luz, y magnetismo). El estadoSensor2 está para pruebas con otros sensores si es necesario pero no se utiliza.
+
+### 🔁 `loop()`
+
+Ahora empieza la función más importante, el `loop()`. Está **es una función predeterminada que se ejecuta en bucle** esperando condiciones y actualizaciones. Al inicio, **recoge el estado de los 3 sensores** principales (agua, luz, y magnetismo). El `estadoSensor2` está para pruebas con otros sensores si es necesario pero no se utiliza.
+
 ```cpp
-  int estadoSensor1 = digitalRead(sensorPin1);
-  int estadoSensor2 = digitalRead(sensorPin2);
-  int estadoSensor3 = digitalRead(sensorPin3);
-  int estadoSensor4 = digitalRead(aguaPin);
+int estadoSensor1 = digitalRead(sensorPin1);
+int estadoSensor2 = digitalRead(sensorPin2);
+int estadoSensor3 = digitalRead(sensorPin3);
+int estadoSensor4 = digitalRead(aguaPin);
 ```
-Después, se realiza el encendido y apagado del LED al cerrase o abrirse la caja (3 parpadeos), y al sonar la alarma (hasta que se apage).
+
+### 💡 Parpadeo del LED
+
+Después, se realiza **el encendido y apagado del LED al cerrarse o abrirse la caja** (3 parpadeos), **y al sonar la alarma** (hasta que se apague).
+
 ```cpp
   if (cajaAbierta && !parpadeoCajaRealizado) {
     for (int i = 0; i < 3; i++) {
@@ -163,9 +200,13 @@ Después, se realiza el encendido y apagado del LED al cerrase o abrirse la caja
     digitalWrite(ledPin, LOW);
   }
 ```
-Aqui se realiza la activación de la alarma. En el if (alarmaActivada) se da preferencia a la alarma de robo por encima de la de agua. Además, arriba se activan las flags si el sensor detecta algo.
+
+### 🚨 Activación de alarmas
+
+Aquí se realiza la **activación de la alarma**. En el `if (alarmaActivada)` se da **preferencia a la alarma de robo por encima de la de agua**. Además, arriba se activan las flags si el sensor detecta algo.
+
 ```cpp
-  if (!alarmaActivada && estadoSensor3 == HIGH && variable3 == 0) {
+ if (!alarmaActivada && estadoSensor3 == HIGH && variable3 == 0) {
     alarmaActivada = true;
   }
 
@@ -191,7 +232,11 @@ Aqui se realiza la activación de la alarma. En el if (alarmaActivada) se da pre
     }
   }
 ```
-Aqui se define la activación de la variable1, el sensor de linea. El primer condicional hace que solo el sensor detecte algo si las alarmas no están activada, después mira el estado del sensor y si está encendido algo hace la variable1 activable. Depues revisa si el sensor a detectado algo, y si la variable no estaba ya activada la activa e incia el contador de 2 minutos (si la variable 3 no está activada), que si se acaba la variable vuelve a 0.
+
+### 📶 Activación `variable1` (sensor línea)
+
+Aquí **se define la activación de la variable1**, el sensor de línea. El primer condicional hace que **solo el sensor detecte algo si las alarmas no están activada**, después mira el estado del sensor y si está encendido hace la variable1 activable. **Después revisa si el sensor ha detectado algo**, y s**i la variable no estaba ya activada la activa e inicia el contador de 2 minutos** (si la variable 3 no está activada), que si se acaba la `variable1` vuelve a 0.
+
 ```cpp
   if (!alarmaActivada && !alarmaAguaActivada) {
     if (estadoSensor1 == HIGH) {
@@ -212,18 +257,22 @@ Aqui se define la activación de la variable1, el sensor de linea. El primer con
     variable1Activable = false;
   }
 ```
-Aqui se define la activación de la variable2. En el primer condicional revisa si el sensor está activo y espera un mensaje, que si existe hace la variable2 activable y lo reenvia para comprobar que ha llegado bien. Después, si la variable2 es activable y el mensaje existe, Elije el mensaje que responder:
+
+### 📲 Comunicación Bluetooth y control `variable2`
+
+Aquí **se define la activación de la variable2**. En el **primer condicional revisa si el sensor está activo y espera un mensaje**, que si existe hace la `variable2` activable y lo reenvía para comprobar que ha llegado bien. **Después, si la `variable2` es activable y el mensaje existe, Elije el mensaje que responder**:
 * Si la alarma está activada y recibe el código, la desactiva y responde "Alarma desactivada"
-* Si la alarma está activada y el codigo que recibe es incorrecto, responde "Alarma activada, codigo incorrecto."
-* Si la alarma de agua esta activada, responde "Alarma de agua activada, mire si la caja está mojada o llévela a reparación."
-* Si la variable2 (el bluetooth) y está activada y la caja está cerrada, responde "Ya se habia introducido el codigo, introduzca la llave."
-* Si la variable2 está activada, la caja abierta y el codigo es distinto del codigo de cierre de la caja, responde "Ya se habia introducido el codigo, la caja esta abierta."
-* Si las variables 1, 2 y 3 están desactivadas y le llega el código correcto, responde "Codigo correcto, introduzca la llave.", cambia variable2 = 1 y activa el temporizador2.
-* Si la caja está abierta y el recibe la contraseña de cierre, responde "Cerrando caja...", ejecuta cerrarCaja() y pone variable3 a 0
-* Si el mensaje es el código, estando la caja cerrada, la variable2 en 0 y la 1 en 1, responde "Caja abierta", cambia variable 2 y 3 a 1 y desactiva el temporizador2.
+* Si la alarma está activada y el código que recibe es incorrecto, responde "Alarma activada, código incorrecto."
+* Si la alarma de agua está activada, responde "Alarma de agua activada, mire si la caja está mojada o llévela a reparación."
+* Si la `variable2` (el bluetooth) y está activada y la caja está cerrada, responde "Ya se había introducido el código, introduzca la llave."
+* Si la variable2 está activada, la caja abierta y el código es distinto del código de cierre de la caja, responde "Ya se había introducido el código, la caja está abierta."
+* Si las `variables 1, 2 y 3` están desactivadas y le llega el código correcto, responde "Código correcto, introduzca la llave.", cambia `variable2 = 1` y activa el `temporizador2`.
+* Si la caja está abierta y recibe la contraseña de cierre, responde "Cerrando caja...", ejecuta `cerrarCaja()` y pone `variable3` a 0
+* Si el mensaje es el código, estando la caja cerrada, la `variable2` en 0 y la `variable1` en 1, responde "Caja abierta", cambia `variable 2 y 3` a 1 y desactiva el `temporizador2`.
 * Si el mensaje es incorrecto, responde "Código incorrecto"
 * Si no se cumple ninguna condición, responde "Error"
 Al final vuelve a reiniciar el mensaje a "".
+
 ```cpp
   if (Serial.available()) {
     mensajeBT = Serial.readStringUntil('\n');
@@ -283,7 +332,11 @@ Al final vuelve a reiniciar el mensaje a "".
     mensajeBT = "";
   }
 ```
-Después empieza la lógica de contadores. Sería mas sencillo hacerla con delays pero utiliza millis() con un bucle para no parar la función loop. Si pasan 2 minutos y no se ha activado la otra variable, la reinicia.
+
+### ⏱️ Lógica de temporizadores
+
+Después empieza **la lógica de contadores**. Sería más sencillo hacerla con `delays` pero **utiliza `millis()` con un bucle para no parar la función loop**. Si pasan 2 minutos y no se ha activado la otra variable, la reinicia.
+
 ```cpp
   if (temporizadorActivo1 && millis() - tiempoActivacion1 > TIEMPO_ESPERA) {
     variable1 = 0;
@@ -299,7 +352,11 @@ Después empieza la lógica de contadores. Sería mas sencillo hacerla con delay
     }
   }
 ```
-Esta parte abre la caja y apaga los contadores si variable3 pasa a 1.
+
+### 📤 Apertura y cierre de caja
+
+Esta parte **abre la caja y apaga los contadores si `variable3` pasa a 1**.
+
 ```cpp
   if (variable3 == 1 && !cajaAbierta) {
     abrirCaja();
@@ -309,10 +366,15 @@ Esta parte abre la caja y apaga los contadores si variable3 pasa a 1.
     cerrarCaja();
   }
 ```
+
+### 🖥️ Monitor en tiempo real
+
 Esta parte es del monitor en tiempo real para el desarrollo.
+
 ```cpp
-  if (millis() - ultimoPrint >= intervaloPrint) {
-    //printStatus();
-    ultimoPrint = millis();
-  }
+if (millis() - ultimoPrint >= intervaloPrint) {
+  // printStatus();
+  ultimoPrint = millis();
+}
 ```
+
